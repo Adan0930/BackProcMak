@@ -1,0 +1,1 @@
+import {Strategy as jwtStrategy} from 'passport-jwt';

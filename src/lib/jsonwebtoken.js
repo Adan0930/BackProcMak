@@ -1,39 +1,37 @@
-
 import jwt, { decode } from 'jsonwebtoken';
 import { config } from "dotenv";
-//import { token } from 'morgan';
 config();
 
-// Create Token
 
+
+// Create Token
 export const createJWT = (user)=>{
     const secret = process.env.SECRET_JWT;
-
     const payload = {
-        id: user.id,
-        userName: user.userName,
-        email: user.email,
+        NameUser: user.NameUser,
+        EmailCompany: user.EmailCompany,
+        Password: user.Password
     };
-
-    const token =jwt.sign(payload,secret,{expiresIn:'1h'});
-
+    const token = jwt.sign(payload,process.env.SECRET_JWT,{expiresIn:'1h'});
     return token;
 };
 
 // VERIFY TOKEN ROUTE
-
-
 export const verifyToken = (req,res,next)=>{
-    
-}
-
-jwt.verify(token,process.env.SECRET_JWT,(err,decoded)=>{
-    if(err){
-        console.error('El token es invalido',err)
-    }else{
-        console.log('Token valido',decoded)
+    // console.log(req.headers);
+    const token = req.headers['authorization'];
+    if(!token){
+        return res.status(403).json({message:'Token no proporcionado'});   
     }
-});
+    jwt.verify(token,process.env.SECRET_JWT,(err,decoded)=>{
+        if(err){
+            return res.status(401).json({message:"Token no valido"})
+        }
+        req.user = decoded;
+        next();
+    });
+};
+
 
 
 

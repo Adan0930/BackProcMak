@@ -1,4 +1,5 @@
 import {pool} from '../../../database.js';
+
 //REGISTER COMPANYS
 
 export const signUpCompany = async (req,res) =>{    
@@ -6,8 +7,8 @@ export const signUpCompany = async (req,res) =>{
     // CHECK IF THE EMAIL ALREADY EIXIST 
     const [emailExistenceCompany]= await pool.query('SELECT * FROM Companys WHERE EmailCompany = ?',[EmailCompany]);
     if(emailExistenceCompany.length > 0){
-        console.log('Este correo ya Existe');
-        return res.send('Este email ya esta registrasdo el la base de datos');
+    
+        return res.status(409).json({message:'ESTE CORREO YA EXISTE EN LA BASE DE DATOS'})
     }
     //CREATE THE COMPANY USER 
     const newUserCompany={
@@ -17,12 +18,11 @@ export const signUpCompany = async (req,res) =>{
     // SAVING IN THE DATABASE ProcMak IN TABLE Companys
     const [results] = await pool.query('INSERT INTO Companys SET ?', newUserCompany);
     newUserCompany.id = results.insertId;
-    console.log(newUserCompany);
 
     //INSERT TYPE SUSCRIPTION DEFAULT
     const CompanyID = results.insertId;
+    // const SuscriptionCompany = await pool.query('INSERT INTO Suscriptions (CompanyID) VALUES (?)',[CompanyID]);
 
-    const SuscriptionCompany = await pool.query('INSERT INTO Suscriptions (CompanyID) VALUES (?)',[CompanyID]);
-    console.log(SuscriptionCompany);
+    return(res.status(201).json({message:'LA COMPAÑIA SE INSERTO CORRECTAMENTE'}));
 };
 

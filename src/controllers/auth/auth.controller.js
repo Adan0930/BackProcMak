@@ -1,39 +1,34 @@
-import passport from "passport";
 import {matchPassword} from '../../lib/bcrypt.js'
 import {createJWT} from "../../lib/jsonwebtoken.js";
 import {pool} from '../../../database.js';
 
 
-
 // Init session JWT 
 export const  signIn = async(req,res)=>{
-    const{email,password} =req.body;
+    const{EmailCompany,Password} =req.body;
     
     try{
         // search user Database
-        const query = 'SELECT * FROM users WHERE email = ?';
-        const [rows] = await pool.query(query,[email]);
+        const query = 'SELECT * FROM UsersCompany WHERE EmailCompany = ?';
+        const [rows] = await pool.query(query,[EmailCompany]);
         
         if(rows.length > 0){
-            
             const user = rows[0];
-            const comparePassword = await matchPassword(password, user.password)
-            if(comparePassword){
+            const comparePassword = await matchPassword(Password, user.Password)
+            if(comparePassword ){
                 const token = createJWT(user);
-                console.log(user);
                 return res.json({token});
             }else{
-                res.status(401).json({message:'err compare password'})
+                res.status(500).json({message:'Error Compare Password'})
             }
         
         }else{
-            res.status(401).json({message:'Credeciales invalidas'});
+            res.status(404).json({message:'Usuario no encontrado'});
         }
-        
     }
     catch(err){
-        res.status(err)
+        res.status(401).json({message:err})
     }
-
+    
 };
 

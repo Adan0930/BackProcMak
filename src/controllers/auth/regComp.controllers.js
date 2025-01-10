@@ -18,11 +18,7 @@ export const signUpCompany = async (req,res) =>{
     // SAVING IN THE DATABASE ProcMak IN TABLE Companys
     const [results] = await pool.query('INSERT INTO Companys SET ?', newUserCompany);
     newUserCompany.id = results.insertId;
-
-    //INSERT TYPE SUSCRIPTION DEFAULT
-    const CompanyID = results.insertId;
-    // const SuscriptionCompany = await pool.query('INSERT INTO Suscriptions (CompanyID) VALUES (?)',[CompanyID]);
-
+    
     return(res.status(201).json({message:'LA COMPAÑIA SE INSERTO CORRECTAMENTE'}));
 };
 

@@ -6,7 +6,6 @@ import  {encryptPassword}  from '../../lib/bcrypt.js';
 
 export const signUpUser = async(req,res) =>{
     const {emailCompany, NameUser, Password,Password2} = req.body;
-
     if(Password !== Password2){
         return res.status(400).json({message:'Las contraseñas no son iguales'});
     }

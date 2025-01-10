@@ -176,3 +176,14 @@ ALTER TABLE RolePermissions
     REFERENCES Permissions(PermissionsID)
     ON DELETE CASCADE 
     ON UPDATE CASCADE;
+
+
+
+SELECT NameUser, Password, EmailCompany FROM UsersCompany INNER JOIN 
+Companys ON UsersCompany.CompanyID = Companys.CompanyID
+WHERE NameUser = ? AND Password = ? AND EmailCompany = ? ;
+
+
+
+SELECT COUNT(*) FROM UsersCompany INNER JOIN 
+Companys ON UsersCompany.CompanyID = Companys.CompanyID;
